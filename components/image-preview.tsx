@@ -29,25 +29,23 @@ export function ImagePreview({
   onReset,
 }: ImagePreviewProps) {
   const [showComparison, setShowComparison] = useState(true);
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (!transformedImage) return
 
     try {
-      // Fetch the blob URL and convert to blob
-      const response = await fetch(transformedImage)
-      const blob = await response.blob()
-
-      // Create download link
-      const url = URL.createObjectURL(blob)
+      console.log('[v0] Starting download for:', transformedImage)
+      
+      // Create a temporary link element
       const link = document.createElement('a')
-      link.href = url
+      link.href = transformedImage
       link.download = `fujifilm-${selectedRecipe}-${Date.now()}.jpg`
+      
+      // Append to body, click, and remove
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-
-      // Cleanup
-      setTimeout(() => URL.revokeObjectURL(url), 100)
+      
+      console.log('[v0] Download initiated successfully')
     } catch (error) {
       console.error('[v0] Download failed:', error)
     }
